@@ -1,8 +1,17 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Write from "./Components/Write";
 
 function App() {
   return (
     <div className="App">
-      asdasddfg
+      <Router>
+
+        <Routes>
+          <Route path="/" element={ <Write />} />
+          <Route path="/write" element={ <Write />} />
+        </Routes>
+
+      </Router>
     </div>
   );
 }
