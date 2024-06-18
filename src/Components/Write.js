@@ -36,12 +36,11 @@ function Write() {
         <input id="pass-input" type="text" value={inputValue2}
         onChange={(e)=> setInputValue2(e.target.value)}/><br/>
 
-        <button onClick={SaveData}>Sign Up</button>
+        <button onClick={ () => SaveData() && navigate("/read")}>Sign Up</button>
         <br/>
         <br/>
 
-        <button className='button1' onClick={ () => navigate("/")}>GO READ</button> <br />
-      <button className='button1' onClick={ () => navigate("/updateread")}>GO UPDATEREAD</button>
+      <button className='button1' onClick={ () => navigate("/read")}>GO READ</button>
     </div>
   )
 }

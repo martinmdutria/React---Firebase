@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import app from "../FirebaseConfig"
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, remove } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 
 function Read() {
@@ -14,10 +14,24 @@ function Read() {
         const dbRef = ref(db, "users/");
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
-            setUserArray(Object.values(snapshot.val()));
+            const myData = snapshot.val();
+            const tempArray = Object.keys(myData).map(myUid => {
+                return {
+                    ...myData[myUid],
+                    uid: myUid
+                }
+            })
+            setUserArray(tempArray);
         } else{
             alert("error")
         }
+    }
+    
+    const deleteUser = async (uidParam) => {
+        const db = getDatabase(app);
+        const dbRef = ref(db, "users/"+uidParam);
+        await remove(dbRef);
+        fetchData()
     }
 
   return (
@@ -27,7 +41,9 @@ function Read() {
         <ul>
             {userArray.map( (item, index) => (
                 <li key={index}> 
-                {item.user}: {item.password}
+                {item.user}: {item.password} : {item.uid}
+                <button className='button1' onClick={ () => navigate(`/update/${item.uid}`)}>UPDATE</button>
+                <button className='button1' onClick={ () => deleteUser(item.uid)}>DELETE</button>
                 </li>
         ) )}
       </ul>
@@ -35,7 +51,6 @@ function Read() {
       <br/>
 
       <button className='button1' onClick={ () => navigate("/")}>GO HOMEPAGE</button> <br />
-      <button className='button1' onClick={ () => navigate("/updateread")}>GO UPDATEREAD</button>
 
     </div>
   )
