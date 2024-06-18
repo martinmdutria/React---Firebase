@@ -3,7 +3,7 @@ import app from "../FirebaseConfig"
 import { getDatabase, ref, get } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 
-function Read() {
+function UpdateRead() {
 
     const navigate = useNavigate();
 
@@ -14,7 +14,14 @@ function Read() {
         const dbRef = ref(db, "users/");
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
-            setUserArray(Object.values(snapshot.val()));
+            const myData = snapshot.val();
+            const tempArray = Object.keys(myData).map(myUid => {
+                return {
+                    ...myData[myUid],
+                    uid: myUid
+                }
+            })
+            setUserArray(tempArray);
         } else{
             alert("error")
         }
@@ -27,18 +34,18 @@ function Read() {
         <ul>
             {userArray.map( (item, index) => (
                 <li key={index}> 
-                {item.user}: {item.password}
+                {item.user}: {item.password} : {item.uid}
                 </li>
         ) )}
       </ul>
       <br/>
       <br/>
-
+      
       <button className='button1' onClick={ () => navigate("/")}>GO HOMEPAGE</button> <br />
-      <button className='button1' onClick={ () => navigate("/updateread")}>GO UPDATEREAD</button>
+      <button className='button1' onClick={ () => navigate("/read")}>GO READ PAGE</button>
 
     </div>
   )
 }
 
-export default Read
+export default UpdateRead
